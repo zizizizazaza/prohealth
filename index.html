@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProHealth AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:#F5F7FA;color:#111827;line-height:1.5;-webkit-font-smoothing:antialiased}
+  ::-webkit-scrollbar{width:8px;height:8px}
+  ::-webkit-scrollbar-thumb{background:#E0E3E8;border-radius:8px}
+  button{font-family:inherit}
+
+  .app{height:100vh;display:flex;overflow:hidden;background:#F5F7FA}
+
+  /* ===== Sidebar ===== */
+  .sidebar{width:266px;flex:0 0 auto;background:#fff;border-right:1px solid #E9EBEF;display:flex;flex-direction:column;min-height:0}
+  .logo-row{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 10px}
+  .logo{display:flex;align-items:center;gap:7px;font-weight:700;font-size:16px;color:#111827}
+  .logo svg{flex:0 0 auto}
+  .icon-btns{display:flex;gap:2px;color:#9CA3AF}
+  .icon-btn{background:transparent;border:none;color:inherit;cursor:pointer;padding:6px;border-radius:8px;display:flex;transition:.13s}
+  .icon-btn:hover{background:#F3F4F6;color:#111827}
+
+  .new-wrap{padding:4px 12px 6px}
+  .new-btn{width:100%;display:flex;align-items:center;gap:9px;background:#E6F0FF;color:#0A5CFF;border:none;border-radius:11px;padding:11px 12px;font-size:13.5px;font-weight:600;cursor:pointer;transition:background .15s}
+  .new-btn:hover{background:#d7e6ff}
+
+  .lib{padding:10px 12px 4px}
+  .sec-label{font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:#9CA3AF;padding:4px 8px 6px}
+  .nav-item{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:9px;font-size:13.5px;cursor:pointer;color:#4B5563;transition:background .13s}
+  .nav-item:hover{background:#F3F4F6}
+  .nav-item.active{background:#E6F0FF;color:#0A5CFF;font-weight:600}
+  .nav-item.active:hover{background:#E6F0FF}
+  .nav-item .badge{margin-left:auto;font-size:11px;color:#6B7280;background:#F3F4F6;padding:1px 8px;border-radius:9px;font-weight:600}
+
+  .recents{flex:1;overflow-y:auto;min-height:0;padding:8px 12px 12px}
+  .recent{padding:8px 10px;border-radius:9px;cursor:pointer;transition:background .13s}
+  .recent:hover{background:#F3F4F6}
+  .recent .t{font-size:13px;color:#374151;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .recent .d{font-size:11px;color:#9CA3AF;margin-top:1px}
+
+  .side-foot{border-top:1px solid #E9EBEF;padding:10px 12px;display:flex;align-items:center;gap:10px}
+  .side-foot .ava{width:30px;height:30px;border-radius:50%;background:#0A5CFF;color:#fff;display:grid;place-items:center;font-size:11px;font-weight:700;flex:0 0 auto}
+  .side-foot .who{min-width:0;flex:1}
+  .side-foot .nm{font-size:12.5px;font-weight:600;color:#111827}
+  .side-foot .pl{font-size:11px;color:#9CA3AF}
+
+  /* ===== Main ===== */
+  .main{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0}
+  .topbar{height:56px;flex:0 0 auto;display:flex;align-items:center;padding:0 24px;gap:10px}
+  .pillbar{margin-left:auto;display:flex;gap:6px;background:#fff;padding:4px;border-radius:9999px;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+  .pillbar .seg{display:flex;align-items:center;gap:7px;padding:6px 13px;border-radius:9999px;font-size:13px;font-weight:500}
+  .pillbar .seg.on{color:#111827;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+  .pillbar .seg.off{color:#6B7280}
+  .stack{display:flex;align-items:center}
+  .stack .a{width:24px;height:24px;border-radius:50%;border:2px solid #fff;overflow:hidden}
+  .stack .a+.a{margin-left:-8px}
+  .stack .a img{width:100%;height:100%;object-fit:cover}
+
+  .content{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;padding:0 28px;overflow-y:auto}
+  h1.hero{order:2;margin:auto 0;font-size:31px;font-weight:700;letter-spacing:-.025em;color:#111827;text-align:center}
+  p.sub{margin-top:10px;font-size:14.5px;color:#6B7280;text-align:center;max-width:520px;line-height:1.55}
+
+  .composer{order:5;flex:0 0 auto;width:100%;max-width:880px;margin:0 0 24px;background:#fff;border:1px solid #E9EBEF;border-radius:20px;box-shadow:0 10px 34px rgba(0,0,0,.05);padding:6px}
+  .composer textarea{width:100%;border:none;background:transparent;resize:none;font-family:inherit;font-size:15px;line-height:1.6;color:#111827;padding:14px 16px 4px;min-height:60px;outline:none}
+  .composer-bar{display:flex;align-items:center;justify-content:space-between;padding:4px 8px 6px}
+  .chip{display:flex;align-items:center;gap:7px;background:#F5F7FA;border:1px solid #E9EBEF;color:#4B5563;border-radius:9999px;padding:6px 12px;font-size:12.5px;font-weight:600;cursor:pointer}
+  .chip:hover{background:#EEF2F6}
+  .c-actions{display:flex;align-items:center;gap:6px}
+  .ghost-btn{background:transparent;border:none;color:#9CA3AF;cursor:pointer;padding:8px;border-radius:9999px;display:flex;transition:.13s}
+  .ghost-btn:hover{background:#F3F4F6;color:#111827}
+  .send{background:#0A5CFF;color:#fff;border:none;border-radius:9999px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;transition:background .15s}
+  .send:hover{background:#084ED9}
+
+  .pills{order:4;flex:0 0 auto;width:100%;max-width:880px;margin:0 0 12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+  .qa{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #E9EBEF;color:#374151;border-radius:9999px;padding:10px 16px;font-size:13.5px;font-weight:500;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.03);transition:.13s}
+  .qa:hover{border-color:#BFDBFE;color:#0A5CFF;background:#F8FBFF}
+
+  .docstrip{order:2;flex:0 0 auto;width:100%;margin-top:2px}
+  .docrow{display:flex;gap:6px;justify-content:center;align-items:flex-start;flex-wrap:nowrap}
+  .dperson{display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;width:54px}
+  .dlabel{font-size:9px;font-weight:600;color:#6B7280;text-align:center;line-height:1.15;max-width:54px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dperson:hover .dlabel{color:#0A5CFF}
+  .davatar{flex:0 0 auto;width:40px;height:40px;border-radius:50%;border:2px solid #fff;box-shadow:0 3px 10px rgba(10,50,110,.15);position:relative;cursor:pointer;transition:transform .2s,box-shadow .2s}
+  .davatar:hover{transform:translateY(-3px);box-shadow:0 8px 18px rgba(10,50,110,.2)}
+  .davatar img{display:block;width:100%;height:100%;object-fit:cover;border-radius:50%}
+  .nm-pop{position:absolute;top:calc(100% + 7px);left:50%;transform:translateX(-50%) translateY(-3px);white-space:nowrap;background:#fff;border:1px solid #E9EBEF;box-shadow:0 6px 18px rgba(10,50,110,.14);border-radius:9999px;padding:4px 6px 4px 11px;font-size:11.5px;font-weight:600;color:#111827;display:flex;align-items:center;gap:3px;opacity:0;pointer-events:none;transition:opacity .16s,transform .16s;z-index:8}
+  .davatar:hover .nm-pop{opacity:1;transform:translateX(-50%) translateY(0)}
+  .nm-pop svg{width:13px;height:13px;color:#0A5CFF;flex:0 0 auto}
+
+  /* doctor profile modal */
+  .modal-overlay{position:fixed;inset:0;background:rgba(15,30,50,.42);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px;animation:ovfade .18s ease-out}
+  .modal-overlay.on{display:flex}
+  @keyframes ovfade{from{opacity:0}to{opacity:1}}
+  .modal{position:relative;width:380px;max-width:100%;background:#fff;border-radius:22px;box-shadow:0 30px 80px rgba(10,30,60,.32);padding:28px 28px 24px;text-align:center;animation:mpop .2s cubic-bezier(.34,1.56,.64,1)}
+  @keyframes mpop{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+  .modal .m-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border:none;background:#F3F4F6;border-radius:50%;color:#6B7280;font-size:17px;line-height:1;cursor:pointer;display:grid;place-items:center;transition:.13s}
+  .modal .m-close:hover{background:#E5E7EB;color:#111827}
+  .modal .m-av{width:86px;height:86px;border-radius:50%;margin:0 auto;overflow:hidden;border:3px solid #fff;box-shadow:0 8px 22px rgba(10,50,110,.18)}
+  .modal .m-av img{width:100%;height:100%;object-fit:cover;display:block}
+  .modal .m-name{margin-top:14px;font-size:19px;font-weight:800;letter-spacing:-.01em;color:#111827}
+  .modal .m-dept{display:inline-block;margin-top:9px;font-size:12px;font-weight:600;color:#0A5CFF;background:#EAF1FF;border:1px solid #DCE8FF;padding:4px 13px;border-radius:9999px}
+  .modal .m-cap{margin-top:15px;font-size:14px;font-weight:700;color:#1F2937}
+  .modal .m-bg{margin-top:7px;font-size:13px;color:#6B7280;line-height:1.6}
+  .modal .m-btn{margin-top:20px;width:100%;background:#0A5CFF;color:#fff;border:none;border-radius:12px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s}
+  .modal .m-btn:hover{background:#084ED9}
+
+  /* strip caption */
+  .hero-hook{order:1;margin:24px 0 16px;text-align:center}
+  .hero-hook h1{font-family:'Plus Jakarta Sans','Inter',sans-serif;font-size:29px;font-weight:800;letter-spacing:-.02em;color:#111827;line-height:1.2}
+  .hero-hook h1 span{color:#0A5CFF}
+  .hero-hook p{margin-top:10px;font-size:14.5px;font-weight:500;color:#6B7280}
+  .hero-hook p{margin-top:9px;font-size:14px;color:#6B7280}
+
+  /* health overview card (GitHub-contrib style) */
+  .health-card{order:3;flex:0 0 auto;width:100%;max-width:520px;margin:28px 0 auto;background:#fff;border:1px solid #E9EBEF;border-radius:16px;box-shadow:0 8px 24px rgba(10,50,110,.05);padding:14px 16px}
+  .hc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .hc-title{font-size:13px;font-weight:700;color:#111827}
+  .hc-range{display:flex;gap:2px;background:#F3F4F6;padding:2px;border-radius:9999px}
+  .hc-range span{font-size:11px;font-weight:600;color:#6B7280;padding:3px 10px;border-radius:9999px;cursor:pointer;transition:.15s}
+  .hc-range span.on{background:#fff;color:#111827;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .hc-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:14px}
+  .stat{background:#F7F9FB;border:1px solid #EEF1F5;border-radius:10px;padding:8px 10px}
+  .stat .k{font-size:10px;color:#6B7280}
+  .stat .v{margin-top:2px;font-size:15px;font-weight:700;color:#111827;letter-spacing:-.01em}
+  .hc-sub{font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:#9CA3AF;margin-bottom:7px}
+  .hc-focus{display:flex;flex-wrap:wrap;gap:9px 24px;margin-bottom:14px}
+  .focus-item{display:flex;align-items:center;gap:8px}
+  .focus-item .dot{width:8px;height:8px;border-radius:50%;background:#F5B544;flex:0 0 auto}
+  .focus-item.blue .dot{background:#0A5CFF}
+  .focus-item.green .dot{background:#16A34A}
+  .focus-item .fname{font-size:12.5px;font-weight:600;color:#1F2937}
+  .focus-item .fnote{font-size:11.5px;color:#9CA3AF}
+  .hc-grid{display:grid;grid-template-columns:repeat(32,1fr);gap:2px}
+  .hc-grid .cell{aspect-ratio:1;border-radius:2px;background:#EDF0F4}
+  .hc-grid .cell.lg{background:#9FE0BC}
+  .hc-grid .cell.w{background:#F5B544}
+  .hc-grid .cell.r{background:#E5544B}
+  .hc-foot{margin-top:11px;font-size:11px;color:#9CA3AF}
+  .hc-legend{float:right;display:inline-flex;align-items:center;gap:5px;font-size:10px;color:#9CA3AF}
+  .hc-legend i{width:9px;height:9px;border-radius:3px;display:inline-block}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ===== Sidebar ===== -->
+  <aside class="sidebar">
+    <div class="logo-row">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" width="21" height="21" fill="#0A5CFF" stroke="none"><circle cx="12" cy="12" r="10" opacity="0.2"></circle><circle cx="12" cy="12" r="5"></circle></svg>
+        ProHealth AI
+      </div>
+      <div class="icon-btns">
+        <button class="icon-btn" title="Search"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg></button>
+        <button class="icon-btn" title="Toggle panel"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M9 3v18"></path></svg></button>
+      </div>
+    </div>
+
+    <div class="new-wrap">
+      <button class="new-btn" id="newChat">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        New consultation
+      </button>
+    </div>
+
+    <div class="lib">
+      <div class="sec-label">Your library</div>
+      <div class="nav-item" onclick="location.href='health-profile.html'">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        Health profile
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4a2 2 0 0 1 2-2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"></path><path d="M14 2v6h6"></path><path d="M8 13h8M8 17h5"></path></svg>
+        My reports
+        <span class="badge">4</span>
+      </div>
+    </div>
+
+    <div class="recents">
+      <div class="sec-label">Recents</div>
+      <div id="recentsList"></div>
+    </div>
+
+    <div class="side-foot">
+      <div class="ava">JL</div>
+      <div class="who"><div class="nm">Jordan Lin</div><div class="pl">Free plan</div></div>
+      <button class="icon-btn" title="Settings"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></button>
+    </div>
+  </aside>
+
+  <!-- ===== Main ===== -->
+  <main class="main">
+    <div class="topbar"></div>
+
+    <div class="content">
+      <div class="hero-hook">
+        <h1>Watching over your health:<span> Track, Analyse, Prevent</span></h1>
+        <p>by a panel of specialists.</p>
+      </div>
+
+      <div class="health-card">
+        <div class="hc-head">
+          <div class="hc-title">Your health overview</div>
+        </div>
+        <div class="hc-stats" id="hcStats"></div>
+        <div class="hc-sub">Worth your attention</div>
+        <div class="hc-focus">
+          <div class="focus-item"><span class="dot"></span><span class="fname">Sleep quality</span><span class="fnote">improve routine</span></div>
+          <div class="focus-item"><span class="dot"></span><span class="fname">Blood pressure</span><span class="fnote">monitor</span></div>
+          <div class="focus-item blue"><span class="dot"></span><span class="fname">Vitamin D</span><span class="fnote">consider supplement</span></div>
+        </div>
+        <div class="hc-grid" id="hcGrid"></div>
+        <div class="hc-foot"><span class="hc-legend"><i style="background:#9FE0BC"></i>Logged<i style="background:#F5B544;margin-left:8px"></i>Discomfort<i style="background:#E5544B;margin-left:8px"></i>Severe</span>You've checked in on 19 of the last 70 days.</div>
+      </div>
+
+      <!-- composer -->
+      <div class="composer">
+        <textarea id="input" placeholder="Describe a symptom, or paste a lab value, prescription, or what the doctor said…"></textarea>
+        <div class="composer-bar" style="justify-content:flex-end">
+          <div class="c-actions">
+            <button class="ghost-btn" title="Attach report"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg></button>
+            <button class="ghost-btn" title="Voice"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line></svg></button>
+            <button class="send" id="send" title="Send"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- quick pills -->
+      <div class="pills">
+        <button class="qa" data-fill="I've been feeling ">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#0A5CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>Symptom check
+        </button>
+        <button class="qa" data-fill="Help me understand my report: ">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#0A5CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>Report analysis
+        </button>
+        <button class="qa" data-fill="Is it safe to take ">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#0A5CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a2.83 2.83 0 0 0-4-4l-10 10V20.5z"></path><path d="M8.5 8.5 12 12"></path></svg>Medication advice
+        </button>
+        <button class="qa" data-fill="Which kind of doctor should I see for ">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#0A5CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>Which specialist?
+        </button>
+      </div>
+
+      <!-- panel signature -->
+      <div class="docstrip">
+        <div id="avSrc" style="display:none">
+          <div class="avx">
+            <svg viewBox="0 0 64 64" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+              <rect width="64" height="64" fill="#E6F0FF"/>
+              <path d="M9 64 C11 49 22 45 32 45 C42 45 53 49 55 64 Z" fill="#fff"/>
+              <path d="M32 45 L27 60" stroke="#E2E8F0" stroke-width="1.4"/><path d="M32 45 L37 60" stroke="#E2E8F0" stroke-width="1.4"/>
+              <path d="M28 46 L32 53 L36 46 Z" fill="#0A5CFF"/>
+              <path d="M27 46 C27 55 37 55 37 47" fill="none" stroke="#94A3B8" stroke-width="1.5"/><circle cx="37.5" cy="48.5" r="2.1" fill="#64748B"/>
+              <rect x="29" y="39" width="6" height="7" rx="2" fill="#e0ad84"/>
+              <ellipse cx="32" cy="29" rx="11.5" ry="12.6" fill="#f0c9a8"/>
+              <circle cx="20.8" cy="30" r="2.2" fill="#f0c9a8"/><circle cx="43.2" cy="30" r="2.2" fill="#f0c9a8"/>
+              <path d="M20.5 28 C20 16 27 13 32 13 C37 13 44 16 43.5 28 C43.5 23 41.5 20 40 19 C36 16 28 16 24 19 C22.5 20 20.5 23 20.5 28 Z" fill="#3a2d24"/>
+              <circle cx="27.6" cy="29" r="1.4" fill="#3a2f2a"/><circle cx="36.4" cy="29" r="1.4" fill="#3a2f2a"/>
+              <path d="M29 34.5 Q32 36.5 35 34.5" stroke="#e0ad84" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="avx">
+            <svg viewBox="0 0 64 64" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+              <rect width="64" height="64" fill="#E7F6EE"/>
+              <path d="M9 64 C11 49 22 45 32 45 C42 45 53 49 55 64 Z" fill="#fff"/>
+              <path d="M32 45 L27 60" stroke="#E2E8F0" stroke-width="1.4"/><path d="M32 45 L37 60" stroke="#E2E8F0" stroke-width="1.4"/>
+              <path d="M28 46 L32 53 L36 46 Z" fill="#157A5F"/>
+              <path d="M27 46 C27 55 37 55 37 47" fill="none" stroke="#94A3B8" stroke-width="1.5"/><circle cx="37.5" cy="48.5" r="2.1" fill="#64748B"/>
+              <rect x="29" y="39" width="6" height="7" rx="2" fill="#d09e76"/>
+              <path d="M18 44 C16 26 22 11 32 11 C42 11 48 26 46 44 L40 44 C42 30 40 22 32 22 C24 22 22 30 24 44 Z" fill="#26303f"/>
+              <ellipse cx="32" cy="29" rx="11.5" ry="12.6" fill="#e6b78f"/>
+              <circle cx="20.8" cy="30" r="2.2" fill="#e6b78f"/><circle cx="43.2" cy="30" r="2.2" fill="#e6b78f"/>
+              <circle cx="27.6" cy="29" r="1.4" fill="#3a2f2a"/><circle cx="36.4" cy="29" r="1.4" fill="#3a2f2a"/>
+              <path d="M29 34.5 Q32 36.5 35 34.5" stroke="#d09e76" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="avx">
+            <svg viewBox="0 0 64 64" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+              <rect width="64" height="64" fill="#F3EEFB"/>
+              <path d="M9 64 C11 49 22 45 32 45 C42 45 53 49 55 64 Z" fill="#fff"/>
+              <path d="M32 45 L27 60" stroke="#E2E8F0" stroke-width="1.4"/><path d="M32 45 L37 60" stroke="#E2E8F0" stroke-width="1.4"/>
+              <path d="M28 46 L32 53 L36 46 Z" fill="#6a4d8c"/>
+              <path d="M27 46 C27 55 37 55 37 47" fill="none" stroke="#94A3B8" stroke-width="1.5"/><circle cx="37.5" cy="48.5" r="2.1" fill="#64748B"/>
+              <rect x="29" y="39" width="6" height="7" rx="2" fill="#b3784d"/>
+              <ellipse cx="32" cy="29" rx="11.5" ry="12.6" fill="#c68a5e"/>
+              <circle cx="20.8" cy="30" r="2.2" fill="#c68a5e"/><circle cx="43.2" cy="30" r="2.2" fill="#c68a5e"/>
+              <path d="M20 28 C20 15 27 12 32 12 C37 12 44 15 44 28 C44 23.5 42 20.5 40.5 19.5 C36.5 16.5 27.5 16.5 23.5 19.5 C22 20.5 20 23.5 20 28 Z" fill="#1a1410"/>
+              <circle cx="27.6" cy="29" r="1.4" fill="#2a211c"/><circle cx="36.4" cy="29" r="1.4" fill="#2a211c"/>
+              <path d="M29 34.5 Q32 36.5 35 34.5" stroke="#b3784d" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="avx">
+            <svg viewBox="0 0 64 64" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+              <rect width="64" height="64" fill="#FEF4E2"/>
+              <path d="M9 64 C11 49 22 45 32 45 C42 45 53 49 55 64 Z" fill="#fff"/>
+              <path d="M32 45 L27 60" stroke="#E2E8F0" stroke-width="1.4"/><path d="M32 45 L37 60" stroke="#E2E8F0" stroke-width="1.4"/>
+              <path d="M28 46 L32 53 L36 46 Z" fill="#B45309"/>
+              <path d="M27 46 C27 55 37 55 37 47" fill="none" stroke="#94A3B8" stroke-width="1.5"/><circle cx="37.5" cy="48.5" r="2.1" fill="#64748B"/>
+              <rect x="29" y="39" width="6" height="7" rx="2" fill="#dca87d"/>
+              <ellipse cx="32" cy="29" rx="11.5" ry="12.6" fill="#eec6a0"/>
+              <circle cx="20.8" cy="30" r="2.2" fill="#eec6a0"/><circle cx="43.2" cy="30" r="2.2" fill="#eec6a0"/>
+              <path d="M20.5 27 C20 16 27 13 32 13 C37 13 44 16 43.5 27 C43.5 23 41.5 21 40 20 C36 17.5 28 17.5 24 20 C22.5 21 20.5 23 20.5 27 Z" fill="#9aa0a6"/>
+              <g fill="none" stroke="#475569" stroke-width="1.3"><circle cx="27.6" cy="29" r="3.3"/><circle cx="36.4" cy="29" r="3.3"/><line x1="31" y1="29" x2="33" y2="29"/></g>
+              <path d="M29 35 Q32 37 35 35" stroke="#dca87d" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="avx">
+            <svg viewBox="0 0 64 64" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+              <rect width="64" height="64" fill="#E0F2FE"/>
+              <path d="M9 64 C11 49 22 45 32 45 C42 45 53 49 55 64 Z" fill="#fff"/>
+              <path d="M32 45 L27 60" stroke="#E2E8F0" stroke-width="1.4"/><path d="M32 45 L37 60" stroke="#E2E8F0" stroke-width="1.4"/>
+              <path d="M28 46 L32 53 L36 46 Z" fill="#0EA5E9"/>
+              <path d="M27 46 C27 55 37 55 37 47" fill="none" stroke="#94A3B8" stroke-width="1.5"/><circle cx="37.5" cy="48.5" r="2.1" fill="#64748B"/>
+              <rect x="29" y="39" width="6" height="7" rx="2" fill="#d09e76"/>
+              <path d="M18 41 C16 25 22 11 32 11 C42 11 48 25 46 41 C45 35 43 33 42 32 C42 26 40 21 32 21 C24 21 22 26 22 32 C21 33 19 35 18 41 Z" fill="#5a3d2a"/>
+              <ellipse cx="32" cy="29" rx="11.5" ry="12.6" fill="#e6b78f"/>
+              <circle cx="20.8" cy="30" r="2.2" fill="#e6b78f"/><circle cx="43.2" cy="30" r="2.2" fill="#e6b78f"/>
+              <circle cx="27.6" cy="29" r="1.4" fill="#3a2f2a"/><circle cx="36.4" cy="29" r="1.4" fill="#3a2f2a"/>
+              <path d="M29 34.5 Q32 36.5 35 34.5" stroke="#d09e76" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="docrow" id="docrow"></div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<div class="modal-overlay" id="docModal">
+  <div class="modal">
+    <button class="m-close" id="mClose" title="Close">&times;</button>
+    <div class="m-av" id="mAv"></div>
+    <div class="m-name" id="mName"></div>
+    <div class="m-dept" id="mDept"></div>
+    <div class="m-cap" id="mCap"></div>
+    <div class="m-bg" id="mBg"></div>
+    <button class="m-btn" id="mBtn">Consult this specialist</button>
+  </div>
+</div>
+
+<script>
+  const input = document.getElementById('input');
+  const recentsList = document.getElementById('recentsList');
+
+  const RECENTS = [
+    { t: "Cholesterol panel — second read", d: "Today" },
+    { t: "2-day headache, which department?", d: "Yesterday" },
+    { t: "Can I take these two meds together?", d: "2 days ago" },
+    { t: "Annual checkup — interpret results", d: "Last week" },
+    { t: "Persistent cough — is it serious?", d: "Last week" },
+    { t: "Vitamin D low — what should I do?", d: "Apr 28" },
+    { t: "Blood pressure readings review", d: "Apr 21" },
+    { t: "Recurring heartburn after dinner", d: "Apr 14" },
+  ];
+
+  RECENTS.forEach(r => {
+    const el = document.createElement('div');
+    el.className = 'recent';
+    el.innerHTML = `<div class="t"></div>`;
+    el.querySelector('.t').textContent = r.t;
+    el.addEventListener('click', () => set(r.t));
+    recentsList.appendChild(el);
+  });
+
+  function set(text){ input.value = text; input.focus(); }
+
+  // quick-action pills prefill the composer (matches design)
+  document.querySelectorAll('.qa').forEach(btn => {
+    btn.addEventListener('click', () => set(btn.dataset.fill));
+  });
+
+  document.getElementById('newChat').addEventListener('click', () => set(''));
+
+  // ===== Health overview card =====
+  (function(){
+    const statsEl = document.getElementById('hcStats');
+    const grid = document.getElementById('hcGrid');
+    if (statsEl) {
+      const STATS = [
+        { k: "Consultations", v: "12" },
+        { k: "Symptoms logged", v: "28" },
+        { k: "Active days", v: "19" },
+        { k: "Current streak", v: "2d" },
+      ];
+      STATS.forEach(s => {
+        const el = document.createElement('div');
+        el.className = 'stat';
+        el.innerHTML = `<div class="k"></div><div class="v"></div>`;
+        el.querySelector('.k').textContent = s.k;
+        el.querySelector('.v').textContent = s.v;
+        statsEl.appendChild(el);
+      });
+    }
+    if (grid) {
+      const COLS = 32, ROWS = 7;
+      for (let i = 0; i < COLS * ROWS; i++) {
+        const col = i % COLS;
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        const p = 0.05 + (col / COLS) * 0.5; // recent (right) = more activity
+        if (Math.random() < p) {
+          const r = Math.random();
+          cell.classList.add(r < 0.06 ? 'r' : (r < 0.4 ? 'w' : 'lg'));
+        }
+        grid.appendChild(cell);
+      }
+    }
+  })();
+
+  // ===== Specialist panel: hover name + click-to-open profile =====
+  (function(){
+    const row = document.getElementById('docrow');
+    if (!row) return;
+    const u = id => `https://images.unsplash.com/photo-${id}?w=200&h=200&fit=crop&crop=faces&q=72&auto=format`;
+    const PANEL = [
+      { n:"Dr. Evelyn Hart",    img:u("1612349317150-e413f6a5b16d"), dept:"Neurology",        cap:"Headache, sleep & nerve disorders",
+        bg:"Two decades in headache medicine. Trained at Johns Hopkins; known for separating migraine from tension-type and catching red flags early." },
+      { n:"Dr. Marcus Bennett", img:u("1637059824899-a441006a6875"), dept:"Cardiology",       cap:"Heart, blood pressure & lipids",
+        bg:"Preventive cardiologist and ESC guideline contributor. Focuses on early cardiovascular risk and shared statin decisions." },
+      { n:"Dr. Lena Okafor",    img:u("1560250097-0b93528c311a"),   dept:"Pharmacy",         cap:"Medication safety & interactions",
+        bg:"Clinical pharmacist specializing in polypharmacy — catches drug–drug interactions and dosing issues others miss." },
+      { n:"Dr. Arthur Reed",    img:u("1659353888906-adb3e0041693"), dept:"Evidence Review",  cap:"Guideline appraisal & certainty",
+        bg:"GRADE methodologist with 30+ years. Grades every recommendation by strength of evidence and flags weak data honestly." },
+      { n:"Dr. Chen Wei",       img:u("1645066928295-2506defde470"), dept:"TCM · 中医科",      cap:"Constitution & holistic regulation",
+        bg:"Steeped in the classics — 《黄帝内经》《伤寒论》. Expert in 辨证论治 (pattern differentiation) for sleep, digestion and fatigue." },
+      { n:"Dr. Omar Haddad",    img:u("1712215544003-af10130f8eb3"), dept:"Internal Medicine", cap:"General & metabolic health",
+        bg:"A generalist who connects the dots across systems — the first stop for undifferentiated symptoms and chronic-disease coordination." },
+      { n:"Dr. Grace Park",     img:u("1673865641073-4479f93a7776"), dept:"Endocrinology",    cap:"Hormones, thyroid & diabetes",
+        bg:"Endocrinologist focused on thyroid nodules, prediabetes and metabolic balance — calm, methodical and evidence-led." },
+      { n:"Dr. Nadia Rahman",   img:u("1532938911079-1b06ac7ceec7"), dept:"Dermatology",      cap:"Skin, rashes & hair",
+        bg:"Dermatologist with an eye for what's harmless versus what needs a closer look; practical advice for everyday skin issues." },
+      { n:"Dr. Tomás Rivera",   img:u("1576091160550-2173dba999ef"), dept:"Gastroenterology", cap:"Digestion, gut & liver",
+        bg:"Focused on reflux, IBS and gut health — separates diet-and-habit fixes from what truly needs investigation." },
+      { n:"Dr. Aisha Bello",    img:u("1638202993928-7267aad84c31"), dept:"Pulmonology",      cap:"Lungs, cough & breathing",
+        bg:"Respiratory specialist who triages cough and breathlessness and knows when a symptom is reassuring versus urgent." },
+      { n:"Dr. Daniel Kim",     img:u("1559839734-2b71ea197ec2"),   dept:"Mental Health",    cap:"Mood, stress & sleep",
+        bg:"Supports stress, low mood and sleep with practical, stigma-free guidance and clear escalation when needed." },
+      { n:"Dr. Priya Nair",     img:u("1505751172876-fa1923c5c528"), dept:"Nutrition",        cap:"Diet, weight & metabolism",
+        bg:"Registered dietitian translating lab values and goals into sustainable, realistic eating changes." },
+      { n:"Dr. Samuel Osei",    img:u("1625134673337-519d4d10b313"), dept:"Ophthalmology",    cap:"Eyes & vision",
+        bg:"Eye specialist for vision changes, strain and irritation — flags the few signs that need same-day care." },
+    ];
+    const arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>';
+
+    const shortDept = d => ({"TCM · 中医科":"TCM","Evidence Review":"Evidence","Internal Medicine":"Internal","Endocrinology":"Endocrine","Gastroenterology":"Gastro","Pulmonology":"Lungs","Mental Health":"Mental","Ophthalmology":"Eyes","Dermatology":"Skin"})[d] || d;
+    PANEL.forEach((p, i) => {
+      const col = document.createElement('div');
+      col.className = 'dperson';
+      col.title = p.n;
+      col.innerHTML = `<div class="davatar"><img src="${p.img}" alt=""></div><div class="dlabel">${shortDept(p.dept)}</div>`;
+      col.addEventListener('click', () => openModal(i));
+      row.appendChild(col);
+    });
+
+    const modal = document.getElementById('docModal');
+    function openModal(i){
+      const p = PANEL[i];
+      document.getElementById('mAv').innerHTML = `<img src="${p.img}" alt="">`;
+      document.getElementById('mName').textContent = p.n;
+      document.getElementById('mDept').textContent = p.dept;
+      document.getElementById('mCap').textContent = p.cap;
+      document.getElementById('mBg').textContent = p.bg;
+      modal.classList.add('on');
+    }
+    function closeModal(){ modal.classList.remove('on'); }
+    document.getElementById('mClose').addEventListener('click', closeModal);
+    document.getElementById('mBtn').addEventListener('click', closeModal);
+    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  })();
+
+  // send → enter the consultation room with the question
+  function submit(){
+    const q = input.value.trim();
+    const url = q ? 'consultation.html?q=' + encodeURIComponent(q) : 'consultation.html';
+    window.location.href = url;
+  }
+  document.getElementById('send').addEventListener('click', submit);
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit(); }
+  });
+</script>
+</body>
+</html>
