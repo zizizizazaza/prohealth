@@ -65,6 +65,7 @@
   .pf input:focus,.pf select:focus{border-color:#0A5CFF;box-shadow:0 0 0 2px #E6F0FF}
 
   /* health history */
+  .pc-divider{height:1px;background:#EEF1F5;margin:18px 0 0}
   .hh-item{padding:13px 0;border-bottom:1px solid #F1F4F8}
   .hh-item:last-child{border-bottom:none}
   .hh-head{display:flex;align-items:center;gap:11px}
@@ -160,11 +161,8 @@
           <button class="pc-edit" id="editBtn">Edit</button>
         </div>
         <div class="pc-fields" id="pcFields"></div>
-      </div>
-
-      <!-- Health history -->
-      <div class="card">
-        <div class="card-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>Health record</div>
+        <div class="pc-divider"></div>
+        <div class="card-h" style="margin-top:20px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>Health record</div>
         <div class="hh">
           <div class="hh-item" data-k="past">
             <div class="hh-head"><div class="hh-ic" style="background:#EAF1FF;color:#0A5CFF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v8M8 12h8"></path><rect x="3" y="3" width="18" height="18" rx="4"></rect></svg></div><div><div class="hh-title">Past medical history</div><div class="hh-sub">Conditions & surgeries</div></div><button class="hh-edit">Edit</button></div>
